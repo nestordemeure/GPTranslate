@@ -1,9 +1,9 @@
 # GPTranslate
 
-GPTranslate is a universal translator based on GPT[0].
+GPTranslate is a universal translator based on GPT[^0].
 Give it a book in epub format and it will translate it into any language.
 
-[0]: This is mostly an exercise in using the [ChatGPT API](https://platform.openai.com/docs/guides/chat).
+[^0]: This is mostly an exercise in using the [ChatGPT API](https://platform.openai.com/docs/guides/chat).
 
 ## Usage
 
