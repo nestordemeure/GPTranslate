@@ -28,7 +28,7 @@ max_history_size = 15
 # TRANSLATION
 
 # the model that will be used for the translation
-model = ChatOpenAI()
+model = ChatOpenAI(temperature=0.0)
 
 # main prompt
 system_message = f"Translate from {source_language} to {target_language}. \
