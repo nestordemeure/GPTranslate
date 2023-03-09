@@ -1,6 +1,6 @@
 # GPTranslate
 
-GPTranslate is a universal translator based on GPT.
+GPTranslate is a universal translator based on [GPT](https://openai.com/product).
 Give it a book in `epub` format and it will translate it into any language.
 
 ## Usage
@@ -30,7 +30,7 @@ If the context proves too large for the API, we retry with a smaller number of p
 
 The system message is written as follows:
 
-```json
+```
 I want you to act as a translator from {source_language} to {target_language}.
 I will speak to you in {source_language} or English and you will translate it and answer in {target_language}.
 Your output should be in json format with optional 'translation' (string, only include the translation and nothing else, do not write explanations here), 'notes' (string) and 'success' (boolean) fields.
@@ -48,7 +48,7 @@ We are purposefully avoiding the use of a proper `json` parser as the output is 
 * add the possibility to pick one of 3 translations or type one by hand
 
 * use a database to let the model look at previous parts of the translation that might be relevant to the current bit of text being translated
-* build a user interface that lets a user 
+* build a user interface that lets a user:
     * pick the file
     * pick the destination language (default to English)
     * pick the source language (should default to autodetected)
