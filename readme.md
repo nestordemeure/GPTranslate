@@ -7,7 +7,9 @@ Give it a text (or a full book) and it will translate it into any source languag
 
 ## Usage
 
-**TODO**
+Modify the parameters in the header of the `translate.py` file to specify your file paths and languages.
+
+Run `python3 translate.py`.
 
 ## Inner-workings
 
