@@ -20,6 +20,7 @@ Run `python3 gptranslate.py`.
 
 ## Potential improvements
 
+* add restart if the model fails due to a context too long
 * use a database to let the model look at previous parts of the translation that might be relevant to the current bit of text being translated
 
 * build a user interface that lets a user 
