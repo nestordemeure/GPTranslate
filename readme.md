@@ -30,7 +30,6 @@ If an input cannot be translated, return it unmodified.
 
 ## Potential improvements
 
-* refactor into files
 * add the possibility to pick one of 3 translations or type one by hand (with ways to stop and restart the process)
 * add an async mode to run the translation in parallel
 
