@@ -35,6 +35,12 @@ system_message = f"Translate from {source_language} to {target_language}. \
 Your output should be in json format with optional 'translation' (string), 'notes' (string) and 'success' (boolean) fields. \
 If an input cannot be translated, return it unmodified."
 
+# main prompt
+system_message = f"I want you to act as a translator from {source_language} to {target_language}. \
+I will speak to you in {source_language} or English and you will translate it and answer in {target_language}. \
+Your output should be in json format with optional 'translation' (string), 'notes' (string) and 'success' (boolean) fields. \
+If an input cannot be translated, return it unmodified."
+
 def answer_to_json(text):
     """takes a text and builds a dummy json from it"""
     return '{"translation": "' + text + '"}'
@@ -73,6 +79,7 @@ def json_to_answer(text, alternative_result):
     elif text.endswith('",'): text = text[:-2]
     # clean up escaped string
     text = text.replace('\"', '"')
+    text = text.replace('\"', '"') # slitly different encoding
     print(f"ANSWER: '{text}'")
     return text
 
