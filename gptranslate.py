@@ -41,7 +41,7 @@ def answer_to_json(text):
     """takes a text and builds a dummy json from it"""
     return '{"translation": "' + text + '"}'
 
-def json_to_answer(text, alternative_result):
+def json_to_answer(text, alternative_result, verbose=False):
     """
     takes a roughly json formated string
     extracts the 'translation' field
@@ -73,9 +73,9 @@ def json_to_answer(text, alternative_result):
     if text.startswith('"'): text = text[1:]
     if text.endswith('"'): text = text[:-1]
     elif text.endswith('",'): text = text[:-2]
-    # clean up escaped string
+    # cleanup escaped string
     text = text.replace('\\"', '"')
-    print(f"ANSWER: '{text}'")
+    if verbose: print(f"\n{text}\n")
     return text
 
 def translate(text, previous_translation=[], verbose=True):
@@ -102,7 +102,7 @@ def translate(text, previous_translation=[], verbose=True):
         print(f"Warning: '{e}' restarting with {len(previous_translation)} elements.")
         return translate(text, previous_translation=previous_translation, verbose=verbose)
     # parse answer
-    translation = json_to_answer(answer, text)
+    translation = json_to_answer(answer, text, verbose=verbose)
     return translation
 
 def translate_html(html, verbose=False):
@@ -120,7 +120,7 @@ def translate_html(html, verbose=False):
         text = str(text_node)
         if not text.strip().isdigit():
             # performs the translation
-            translated_text = translate(text, previous_translations)
+            translated_text = translate(text, previous_translations, verbose=verbose)
             previous_translations.append((text, translated_text))
             # updates the node
             translated_text_node = text_node.replace(text, translated_text)
@@ -146,18 +146,20 @@ for (namespace, metadata) in book.metadata.items():
             nb_metadata += 1
             if verbose: print(f" * {nb_metadata}")
             # translates the value
-            translated_value = translate(value)
+            translated_value = translate(value, verbose=verbose)
             translated_data.append( (translated_value,other) )
         metadata[name] = translated_data
+# intermediate save for debug/check purposes
+epub.write_epub(target_file, book)
 
 # process all of the html chapters
 chapters = list(book.get_items_of_type(ebooklib.ITEM_DOCUMENT))
 for i,chapter in enumerate(chapters):
     print(f"Translating chapter `{chapter.get_name()}` ({i+1}/{len(chapters)})...")
     content = chapter.get_content()
-    translated_content = translate_html(content, verbose)
+    translated_content = translate_html(content, verbose=verbose)
     chapter.set_content(translated_content)
-    # intermediate save for debug purposes
+    # intermediate save for debug/check purposes
     epub.write_epub(target_file, book)
 
 print(f"Done!")
