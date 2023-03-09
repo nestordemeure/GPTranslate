@@ -31,7 +31,6 @@ If an input cannot be translated, return it unmodified.
 ## Potential improvements
 
 * add the possibility to pick one of 3 translations or type one by hand (with ways to stop and restart the process)
-* add an async mode to run the translation in parallel
 
 * use a database to let the model look at previous parts of the translation that might be relevant to the current bit of text being translated
 * build a user interface that lets a user 

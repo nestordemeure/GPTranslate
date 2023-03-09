@@ -53,7 +53,7 @@ def json_to_answer(text, alternative_result, verbose=False):
     elif text.endswith('",'): text = text[:-2]
     # cleanup escaped string
     text = text.replace('\\"', '"')
-    if verbose: print(f"\n{text}\n")
+    #if verbose: print(f"\n{text}\n")
     return text
 
 #----------------------------------------------------------------------------------------

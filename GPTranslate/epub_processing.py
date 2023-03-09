@@ -5,7 +5,7 @@ from bs4.element import NavigableString
 
 from .translation import translate
 
-def translate_html(html, source_language, target_language, verbose=False):
+def translate_html(html, source_language, target_language, chapter_name='', verbose=False):
     """takes a string representation of an html and translates its text components"""
     # parse the html
     html = BeautifulSoup(html, 'html.parser')
@@ -16,7 +16,7 @@ def translate_html(html, source_language, target_language, verbose=False):
     previous_translations = []
     text_node: NavigableString # type hint
     for i,text_node in enumerate(text_nodes):
-        if verbose: print(f" * {i+1}/{len(text_nodes)}")
+        if verbose: print(f" * {chapter_name} {i+1}/{len(text_nodes)}")
         text = str(text_node)
         if not text.strip().isdigit():
             # performs the translation
@@ -42,20 +42,24 @@ def translate_metadata(metadata, source_language, target_language, verbose=False
             for (value, other) in data:
                 # displays the progress
                 nb_metadata += 1
-                if verbose: print(f" * {nb_metadata}")
+                if verbose: print(f" * Metadata {nb_metadata}")
                 # translates the value
                 translated_value = translate(value, source_language, target_language, verbose=verbose)
                 translated_data.append( (translated_value,other) )
             metadata[name] = translated_data
+    print(f"Finished translating metadata.")
     return metadata
 
 def translate_chapter(chapter, source_language, target_language, verbose=False):
     """
     takes a chapter (an ITEM_DOCUMENT) and translates it
+    the chapter is modified in place
     """
+    name = chapter.get_name()
     content = chapter.get_content()
-    translated_content = translate_html(content, source_language, target_language, verbose=verbose)
+    translated_content = translate_html(content, source_language, target_language, chapter_name=name, verbose=verbose)
     chapter.set_content(translated_content)
+    print(f"Finished translating '{name}'.")
     return chapter
 
 def translate_book(book, source_language, target_language, output_file=None, verbose=False):
