@@ -94,7 +94,7 @@ def translate(text, source_language, target_language, previous_translations=[], 
         if len(previous_translations) == 0: raise e
         previous_translations.pop()
         print(f"Warning: '{e}' restarting with {len(previous_translations)} elements.")
-        return translate(text, previous_translation=previous_translations, verbose=verbose)
+        return translate(text, source_language, target_language, previous_translations=previous_translations, verbose=verbose)
     # parse answer
     translation = json_to_answer(answer, text, verbose=verbose)
     return translation

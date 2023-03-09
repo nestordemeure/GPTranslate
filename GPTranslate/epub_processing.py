@@ -49,6 +49,15 @@ def translate_metadata(metadata, source_language, target_language, verbose=False
             metadata[name] = translated_data
     return metadata
 
+def translate_chapter(chapter, source_language, target_language, verbose=False):
+    """
+    takes a chapter (an ITEM_DOCUMENT) and translates it
+    """
+    content = chapter.get_content()
+    translated_content = translate_html(content, source_language, target_language, verbose=verbose)
+    chapter.set_content(translated_content)
+    return chapter
+
 def translate_book(book, source_language, target_language, output_file=None, verbose=False):
     """
     takes a book and translate it
@@ -60,10 +69,9 @@ def translate_book(book, source_language, target_language, output_file=None, ver
     # translating the chapters
     chapters = list(book.get_items_of_type(ebooklib.ITEM_DOCUMENT))
     for i,chapter in enumerate(chapters):
+        # translate the current chapter
         if verbose: print(f"Translating chapter `{chapter.get_name()}` ({i+1}/{len(chapters)})...")
-        content = chapter.get_content()
-        translated_content = translate_html(content, source_language, target_language, verbose=verbose)
-        chapter.set_content(translated_content)
+        translate_chapter(chapter, source_language, target_language, verbose=False)
         # save intermediate result
         if output_file is not None: epub.write_epub(output_file, book)
     return book
