@@ -7,7 +7,7 @@ Give it a text (or a full book) and it will translate it into any source languag
 
 ## Usage
 
-Modify the parameters in the header of the `translate.py` file to specify your file paths and languages.
+Modify the parameters in the header of the `translate.py` file to specify your file paths and languages (the input is expected to be in epub format).
 
 Run `python3 translate.py`.
 
