@@ -1,11 +1,11 @@
 # GPTranslate
 
-GPTranslate is a universal translator based on [GPT](https://openai.com/product).
+*GPTranslate* is a universal translator based on the [GPT family of large language models](https://openai.com/product).
 Give it a book in `epub` format and it will translate it into any language.
 
 ## Usage
 
-Modify the parameters in the header of the `translate.py` file to specify your file paths and languages (the input is expected to be in `epub` format).
+Modify the parameters in the header of the `gptranslate.py` file to specify your file paths and languages (the input is expected to be in `epub` format).
 
 Run `python3 gptranslate.py`.
 
