@@ -1,7 +1,7 @@
 # GPTranslate
 
 GPTranslate is a universal translator based on GPT[0].
-Give it a text (or a full book) and it will translate it into any source language.
+Give it a book in epub format and it will translate it into any language.
 
 [0]: This is mostly an exercise in using the [ChatGPT API](https://platform.openai.com/docs/guides/chat).
 
@@ -13,9 +13,10 @@ Run `python3 translate.py`.
 
 ## Inner-workings
 
-* the text is loaded and cut into chunks
-* it is sent one chunk at a time, in sequential order, to the ChatGPT API for translation
-  (passing some of the previous translations along to let GPT use them as context)
+* the epub is parsed into a serie of html nodes
+* the nodes are translated one at a time by ChatGPT
+  passing it the latest translations to be used as context
+* the epub is updated on the fly and then written to disk
 
 ## Potential improvements
 
