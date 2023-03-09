@@ -23,17 +23,13 @@ target_file = data_folder / 'Kirill Eskov - Déjà vu [en].epub'
 # translation
 verbose = True
 max_history_size = 15
+temperature = 0.9
 
 #----------------------------------------------------------------------------------------
 # TRANSLATION
 
 # the model that will be used for the translation
-model = ChatOpenAI(temperature=0.0)
-
-# main prompt
-system_message = f"Translate from {source_language} to {target_language}. \
-Your output should be in json format with optional 'translation' (string), 'notes' (string) and 'success' (boolean) fields. \
-If an input cannot be translated, return it unmodified."
+model = ChatOpenAI(temperature=temperature)
 
 # main prompt
 system_message = f"I want you to act as a translator from {source_language} to {target_language}. \
@@ -78,8 +74,7 @@ def json_to_answer(text, alternative_result):
     if text.endswith('"'): text = text[:-1]
     elif text.endswith('",'): text = text[:-2]
     # clean up escaped string
-    text = text.replace('\"', '"')
-    text = text.replace('\"', '"') # slitly different encoding
+    text = text.replace('\\"', '"')
     print(f"ANSWER: '{text}'")
     return text
 
@@ -104,7 +99,7 @@ def translate(text, previous_translation=[], verbose=True):
         # restart if the context is too large causing errors
         if len(previous_translation) == 0: raise e
         previous_translation.pop()
-        print(f"ERROR: '{e}' restarting with {len(previous_translation)} elements.")
+        print(f"Warning: '{e}' restarting with {len(previous_translation)} elements.")
         return translate(text, previous_translation=previous_translation, verbose=verbose)
     # parse answer
     translation = json_to_answer(answer, text)
@@ -163,10 +158,6 @@ for i,chapter in enumerate(chapters):
     translated_content = translate_html(content, verbose)
     chapter.set_content(translated_content)
     # intermediate save for debug purposes
-    if verbose: epub.write_epub(target_file, book)
-
-# exports the translated file
-print(f"Exporting `{target_file}`...")
-epub.write_epub(target_file, book)
+    epub.write_epub(target_file, book)
 
 print(f"Done!")
