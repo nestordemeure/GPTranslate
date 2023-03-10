@@ -15,10 +15,10 @@ def pick_translation(source, translations, previous_translations):
     # displays the context
     if len(previous_translations) > 0:
         print(f"CONTEXT:")
-        for (source,translation) in previous_translations:
-            print(translation)
+        for (previous_source,previous_translation) in previous_translations:
+            print(previous_translation)
     # displays the source
-    print("\nSOURCE:")
+    print("\nSOURCE (TRANSLATION 0):")
     print(source)
     # displays the translation
     translations = list(set(translations)) # keeps only unique translations
@@ -27,8 +27,8 @@ def pick_translation(source, translations, previous_translations):
         print(translation)
     # display the instructions
     print()
-    if len(previous_translations) > 1:
-        print("Press Enter to pick the first translation.")
+    if len(translations) > 1:
+        print("Press Enter to pick translation 1.")
         print("Type a number to pick a given translation.")
     else:
         print("Press Enter to pick the translation.")
@@ -38,9 +38,13 @@ def pick_translation(source, translations, previous_translations):
     user_input = input("Translation: ")
     if len(user_input) == 0:
         print("\nUsing the first translation.\n")
+        return translations[0]
     elif user_input.isdigit():
         i = int(user_input)-1
-        if i < len(translations):
+        if i < 0:
+            print(f"\nUsing original text.\n")
+            return source
+        elif i < len(translations):
             print(f"\nUsing {i+1}th translation.\n")
             return translations[i]
         else:
