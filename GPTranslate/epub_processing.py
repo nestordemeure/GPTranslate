@@ -44,8 +44,11 @@ def translate_metadata(metadata, source_language, target_language, user_helped=F
                 nb_metadata += 1
                 if verbose: print(f" * Metadata {nb_metadata}")
                 # translates the value
-                translated_value = translate(value, source_language, target_language, 
-                                             user_helped=user_helped, verbose=verbose)
+                if isinstance(value, str):
+                    translated_value = translate(value, source_language, target_language, 
+                                                user_helped=user_helped, verbose=verbose)
+                else:
+                    translated_value = value
                 translated_data.append( (translated_value,other) )
             metadata[name] = translated_data
     print(f"Finished translating metadata.")

@@ -4,15 +4,28 @@ def clear_shell():
     """Clears the shell screen."""
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def pick_translation(source, translations, previous_translations):
+def pick_translation(source, translations, previous_translations, use_heuristics=True):
     """
     takes a source to translate
     several alternative translations
     and the translations of the previous parts of the text
     returns a user picked or written translation
+
+    NOTE: two heuristics can be used to speed-up the work:
+    - if the source is one of the translations then it can be kept (as it likely means that the source is in the target language)
+    - if all translations are identical then the result can be returned (as it likely means that the translation is obvious)
     """
-    clear_shell()
+    # apply heuristics
+    translations = list(set(translations)) # keeps only unique translations
+    if use_heuristics:
+        if source in translations:
+            # likely means that the source is already in the target language
+            return source
+        elif len(translations) == 1:
+            # likely means that the translation is obvious
+            return translations[0]
     # displays the context
+    clear_shell()
     if len(previous_translations) > 0:
         print(f"CONTEXT:")
         for (previous_source,previous_translation) in previous_translations:
@@ -21,7 +34,6 @@ def pick_translation(source, translations, previous_translations):
     print("\nSOURCE (TRANSLATION 0):")
     print(source)
     # displays the translation
-    translations = list(set(translations)) # keeps only unique translations
     for (i,translation) in enumerate(translations):
         print(f"\nTRANSLATION {i+1}:")
         print(translation)
