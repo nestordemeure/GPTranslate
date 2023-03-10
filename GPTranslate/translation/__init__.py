@@ -32,9 +32,11 @@ class Translation:
             if verbose: print(f"{name} done.")
         else:
             # this is a root node
-            for (name_child,source_child) in sources_todo:
-                target_child = list()
-                target.append(target_child)
+            # extends target as much as needed
+            targets_todo = [(name_child,list()) for (name_child,source_child) in sources_todo]
+            target.extend(targets_todo)
+            # process all nodes
+            for ((name_child,source_child),(_,target_child)) in zip(source, target):
                 self._translate_serial(f"{name}|{name_child}", source_child, target_child, autosave_path=autosave_path, user_helped=user_helped, verbose=verbose)
 
     async def _translate_async(self, name, source, target, verbose=False):
@@ -45,12 +47,14 @@ class Translation:
             await asyncio.to_thread(self._translate_serial, name, source, target, verbose=verbose)
         else:
             # this is a root node
-            tasks = list()
+            # extends target as much as needed
             nb_done = len(target)
             sources_todo = source[nb_done:]
-            for (name_child,source_child) in sources_todo:
-                target_child = list()
-                target.append(target_child)
+            targets_todo = [(name_child,list()) for (name_child,source_child) in sources_todo]
+            target.extend(targets_todo)
+            # process all nodes
+            tasks = list()
+            for ((name_child,source_child),(_,target_child)) in zip(source, target):
                 task_child = self._translate_async(f"{name}|{name_child}", source_child, target_child, verbose=verbose)
                 tasks.append(task_child)
             # wait on all the tasks

@@ -51,7 +51,6 @@ We are purposefully avoiding the use of a proper `json` parser as the output is 
 * pass path to translation constructor that can be used for a reload of a partial translation
 * clean up the `translate` function and logic
 * split html on headers
-* fix but in translation tree processing where a started child will be ignored when restarting
 
 * add support for other file formats such as `txt`, `pdf` and `docx`
 
