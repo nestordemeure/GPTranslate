@@ -1,2 +1,2 @@
 from .translation import Translation
-from .book import Book, EpubBook
+from .book import Book

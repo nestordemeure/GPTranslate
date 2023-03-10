@@ -1,5 +1,5 @@
 from pathlib import Path
-from GPTranslate import EpubBook, Translation
+from GPTranslate import Book, Translation
 
 #----------------------------------------------------------------------------------------
 # PARAMETERS
@@ -18,7 +18,7 @@ verbose = True
 
 # imports the epub file
 print(f"Importing `{source_file}`...")
-book = EpubBook(source_file)
+book = Book.load(source_file)
 
 # translating  the book
 print(f"Translating `{source_file}`...")

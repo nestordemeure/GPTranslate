@@ -76,7 +76,7 @@ class Translation:
             pickle.dump(self, f)
     
     @staticmethod
-    def load(path):
+    def load(path) -> 'Translation':
         """loads the translation from disk"""
         with open(path, 'rb') as f:
             obj = pickle.load(f)

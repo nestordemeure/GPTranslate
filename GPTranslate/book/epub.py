@@ -1,20 +1,19 @@
 from ebooklib import epub, ITEM_DOCUMENT
-from bs4 import BeautifulSoup
 from . import Book
-from . import html
+from .html import HtmlBook
 
 class EpubBook(Book):
     """
     Represents an epub
     """
 
-    def __init__(self, path):
+    def __init__(self, data):
         """
         load an epub from a given path
         """
-        self.data = epub.read_epub(path)
+        self.data = data
 
-    def _read_all(self):
+    def _export_raw_texts(self):
         """
         returns a dictionary of lists of string, one list per chapter (plus metadata)
         """
@@ -31,26 +30,21 @@ class EpubBook(Book):
         for chapter in self.data.get_items_of_type(ITEM_DOCUMENT):
             name = chapter.get_name()
             content = chapter.get_content()
-            # parses the html
-            html = BeautifulSoup(content, 'html.parser')
-            text_list = list()
-            for node in html.find_all(string=True):
-                if not ((node.parent.name in html.blacklist) or (node.isspace())):
-                    text = str(node)
-                    if not text.strip().isdigit():
-                        text_list.append(text)
+            # parsing the html
+            html = HtmlBook(content)
+            text_list = html._export_raw_texts()
             # saving the result
             result.append((name,text_list))
         return result
 
-    def _write_all(self, updated_data):
+    def _import_raw_texts(self, updated_data):
         """
         takes a dictionary of lists of string, one list per chapter
         and updates the book in place
         """
         updated_data.reverse()
         # write metadata
-        metadata_list = updated_text.pop()
+        name, metadata_list = updated_data.pop()
         metadata_list.reverse()
         for (namespace, metadata) in self.data.metadata.items():
             for (name, data) in metadata.items():
@@ -64,23 +58,21 @@ class EpubBook(Book):
                 metadata[name] = updated_metadata
         # write chapters
         for chapter in self.data.get_items_of_type(ITEM_DOCUMENT):
-            # TODO delegate this to an html book format
-            name = chapter.get_name()
             content = chapter.get_content()
-            text_list = updated_data.pop()
-            text_list.reverse()
-            # parses the html
-            html = BeautifulSoup(content, 'html.parser')
-            for node in html.find_all(string=True):
-                if not ((node.parent.name in html.blacklist) or (node.isspace())):
-                    text = str(node)
-                    if not text.strip().isdigit():
-                        updated_text = text_list.pop()
-                        updated_node = node.replace(text, updated_text)
-                        node.replace_with(updated_node)
+            (name,texts_list) = updated_data.pop()
+            # parsing the html
+            html = HtmlBook(content)
+            html._import_raw_texts(texts_list)
             # saving the result
-            updated_content = html.prettify("utf-8")
+            updated_content = html.data
             chapter.set_content(updated_content)
+
+    def load(path):
+        """
+        loads the epub from a given path
+        """
+        data = epub.read_epub(path)
+        return EpubBook(data)
 
     def save(self, path):
         """

@@ -48,13 +48,12 @@ We are purposefully avoiding the use of a proper `json` parser as the output is 
 
 ## Potential improvements
 
-* create an `html` book format and reuse it in the epub book
-* clean up the `translate` function and logic
 * pass path to translation constructor that can be used for a reload of a partial translation
+* clean up the `translate` function and logic
+* split html on headers
+* fix but in translation tree processing where a started child will be ignored when restarting
 
-* add ways to pause the translation process and restart it later
-  (important for manual translation as one will not translate a book in a continuous run)
-* add support for other file formats such as `txt`, `pdf`, `docx` and `html`
+* add support for other file formats such as `txt`, `pdf` and `docx`
 
 * use a database to let the model look at previous parts of the translation that might be relevant to the current bit of text being translated
 * build a user interface that lets a user:
