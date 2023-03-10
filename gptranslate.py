@@ -10,7 +10,7 @@ target_language = 'English'
 data_folder = Path('./data')
 source_file = data_folder / 'Kirill Eskov - the Gospel of Afranius [ru].epub'
 target_file = data_folder / 'Kirill Eskov - the Gospel of Afranius [en].epub'
-user_aided_translation = True
+check_translation_manually = True
 verbose = True
 
 #----------------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ book = epub.read_epub(source_file)
 
 # translating  the book
 print(f"Translating `{source_file}`...")
-if user_aided_translation:
+if check_translation_manually:
     book = translate_book(book, source_language=source_language, target_language=target_language, 
                           output_file=target_file, user_helped=True, verbose=verbose)
 else:

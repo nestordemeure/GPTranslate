@@ -39,11 +39,8 @@ def pick_translation(source, translations, previous_translations, use_heuristics
         print(translation)
     # display the instructions
     print()
-    if len(translations) > 1:
-        print("Press Enter to pick translation 1.")
-        print("Type a number to pick a given translation.")
-    else:
-        print("Press Enter to pick the translation.")
+    print("Press Enter to pick translation 1.")
+    print("Type a number to pick another translation (including the source).")
     print("Otherwise, type your own translation:")
     print()
     # process user input
