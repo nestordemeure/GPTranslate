@@ -5,6 +5,7 @@ from langchain.schema import (
     HumanMessage,
     SystemMessage
 )
+from .user_interface import pick_translation
 
 #----------------------------------------------------------------------------------------
 # PARAMETERS
@@ -72,7 +73,7 @@ system_message_prompt = SystemMessagePromptTemplate.from_template(template)
 #----------------------------------------------------------------------------------------
 # TRANSLATE
 
-def translate(text, source_language, target_language, previous_translations=[], verbose=True):
+def translate(text, source_language, target_language, previous_translations=[], user_helped=False, verbose=True):
     """takes a string and a list of previous translation in sequential order in order to build a new translation"""
     # truncate history
     if len(previous_translations) > max_history_size:
@@ -88,13 +89,19 @@ def translate(text, source_language, target_language, previous_translations=[], 
     messages.append(human_message)
     # generate answer
     try:
-        answer = model(messages).content
+        # generate a batch of inputs (if needed)
+        nb_generations = 3 if user_helped else 1
+        messages_batch = [messages] * nb_generations
+        # runs the model and parses the outputs
+        answers = model.generate(messages=messages_batch).generations
+        answers = [answer[0].text for answer in answers]
+        translations = [json_to_answer(answer, text, verbose=verbose) for answer in answers]
+        # picks an output
+        translation = pick_translation(text, translations, previous_translations) if user_helped else answers[0]
+        return translation
     except Exception as e:
         # restart if the context is too large causing errors
         if len(previous_translations) == 0: raise e
         previous_translations.pop()
         print(f"Warning: '{e}' restarting with {len(previous_translations)} elements.")
         return translate(text, source_language, target_language, previous_translations=previous_translations, verbose=verbose)
-    # parse answer
-    translation = json_to_answer(answer, text, verbose=verbose)
-    return translation

@@ -7,6 +7,10 @@ Give it a book in `epub` format and it will translate it into any language.
 
 Modify the parameters in the header of the `gptranslate.py` file to specify your file paths and languages (the input is expected to be in `epub` format).
 
+The program has two modes:
+* `user_aided_translation=True` in which case the translation is done in collaboration between the user and algorithm (this can take a long time but gives the best results),
+* `user_aided_translation=False` which is optimized for speed (good for a fast translation of a text).
+
 Run `python3 gptranslate.py`.
 
 ## Inner-workings
@@ -45,7 +49,7 @@ We are purposefully avoiding the use of a proper `json` parser as the output is 
 ## Potential improvements
 
 * add ways to pause the translation process and restart it later
-* add the possibility to pick one of 3 translations or type one by hand
+  (important for manual translation as one will not translate a book in a continuous run)
 
 * use a database to let the model look at previous parts of the translation that might be relevant to the current bit of text being translated
 * build a user interface that lets a user:

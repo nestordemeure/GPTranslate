@@ -24,7 +24,7 @@ async def translate_book_async(book, source_language, target_language, verbose=F
     await asyncio.gather(*tasks)
     return book
 
-def translate_book(book, source_language, target_language, output_file=None, verbose=False):
+def translate_book(book, source_language, target_language, verbose=False):
     """
     takes a book and translate it modifying it in place
     the translation is done asynchronously, all chapters simultaneously
