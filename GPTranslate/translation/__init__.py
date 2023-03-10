@@ -56,10 +56,10 @@ class Translation:
             # wait on all the tasks
             await asyncio.gather(*tasks)
 
-    def _translate_parallel(self, autosave_path=None, verbose=False):
+    def _translate_parallel(self, name, source, target, autosave_path=None, verbose=False):
         """goes through the tree asynchronously and perform the translation"""
         loop = asyncio.get_event_loop()
-        loop.run_until_complete(self._translate_async(name='', source=self.source, target=self.target, verbose=verbose))
+        loop.run_until_complete(self._translate_async(name, source, target, verbose=verbose))
         if autosave_path is not None: self.save(autosave_path)
 
     def translate(self, autosave_path=None, user_helped=False, verbose=False):
@@ -67,7 +67,7 @@ class Translation:
         if user_helped:
             self._translate_serial(name='', source=self.source, target=self.target, autosave_path=autosave_path, user_helped=user_helped, verbose=verbose)
         else:
-            self._translate_parallel(autosave_path=autosave_path, verbose=verbose)
+            self._translate_parallel(name='', source=self.source, target=self.target, autosave_path=autosave_path, verbose=verbose)
         return self.target
 
     def save(self, path):
