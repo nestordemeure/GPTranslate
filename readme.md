@@ -48,12 +48,18 @@ We are purposefully avoiding the use of a proper `json` parser as the output is 
 
 ## Potential improvements
 
+* refactor the code so that, once loaded, a book is in a `Book` class with:
+    * a `read(self) -> dict(string:[string])` method that produces a dict of lists of string (one list per chapter)
+    * a `write(self, translated_chapters:dict(string:[string]))` method that takes a dict of lists of (translated) string and updates the book
+  the idea is that we use the determinism in iterating on the texts to abstract over the file format and structure
+  this would enable both restarting and introducing alternative file formats easily
+
 * add ways to pause the translation process and restart it later
   (important for manual translation as one will not translate a book in a continuous run)
+* add support for other file formats such as `txt`, `pdf`, `docx` and `html`
 
 * use a database to let the model look at previous parts of the translation that might be relevant to the current bit of text being translated
 * build a user interface that lets a user:
     * pick the file
     * pick the destination language (default to English)
     * pick the source language (should default to autodetected)
-* add support for other file formats such as `txt`, `pdf`, `docx` and `html`
