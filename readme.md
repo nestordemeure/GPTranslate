@@ -50,7 +50,7 @@ We are purposefully avoiding the use of a proper `json` parser as the output is 
 
 * refactor the code so that, once loaded, a book is in a `Book` class with:
     * a `read(self) -> dict(string:[string])` method that produces a dict of lists of string (one list per chapter)
-    * a `write(self, translated_chapters:dict(string:[string]))` method that takes a dict of lists of (translated) string and updates the book
+    * a `write(self, translated_chapters:dict(string:[string]))` method that takes a dict of lists of (translated) string and updates the book  
   the idea is that we use the determinism in iterating on the texts to abstract over the file format and structure  
   this would enable both restarting and introducing alternative file formats easily
 
