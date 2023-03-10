@@ -8,7 +8,7 @@ Give it a book in `epub` format and it will translate it into any language.
 Modify the parameters in the header of the `gptranslate.py` file to specify your file paths and languages (the input is expected to be in `epub` format).
 
 The program has two modes:
-* `check_translation_manually=True` in which case the translation is done in collaboration between the user and algorithm (this can take a long time but gives the best results),
+* `check_translation_manually=True` in which case the translation is done in collaboration between the user and algorithm, giving several potential translations to the user and letting them pick one or write their own (this can take a long time but gives the best results),
 * `check_translation_manually=False` which is optimized for speed (good for a fast translation of a text).
 
 Run `python3 gptranslate.py`.
@@ -24,7 +24,7 @@ Our pipeline follows these steps:
 * each text node is translated
 * we then update the node in place
 
-The pipeline is parallelized by running the translation of the chapters (and metadata) concurrently using `asyncio`.
+When `check_translation_manually` is unchecked, the pipeline is parallelized by running the translation of the chapters (and metadata) concurrently using `asyncio`.
 
 #### Translation
 
