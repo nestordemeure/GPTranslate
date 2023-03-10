@@ -23,5 +23,5 @@ class TextBook(Book):
         saves the text to the given path
         """
         with open(path, "w") as file:
-            data = [line + '\n' for line in self.data]
+            data = [(line + '\n') for line in self.data]
             file.writelines(data)

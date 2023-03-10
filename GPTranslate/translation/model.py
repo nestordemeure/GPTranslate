@@ -48,9 +48,9 @@ def translate(text, source_language, target_language, previous_translations=[], 
         # runs the model and parses the outputs
         answers = model.generate(messages=messages_batch).generations
         answers = [answer[0].text for answer in answers]
-        translations = [json_to_answer(answer, text, verbose=verbose) for answer in answers]
+        translations = [json_to_answer(answer, text) for answer in answers]
         # picks an output
-        translation = pick_translation(text, translations, previous_translations) if user_helped else answers[0]
+        translation = pick_translation(text, translations, previous_translations) if user_helped else translations[0]
         return translation
     except Exception as e:
         # restart if the context is too large causing errors

@@ -20,11 +20,11 @@ class Translation:
         # process down the tree recurcively
         if (len(source) > 0) and isinstance(source[0], str):
             # this is a leaf node
-            history = zip(sources_done, target)
+            history = list(zip(sources_done, target))
             for i,text in enumerate(sources_todo):
                 if verbose: print(f"{name} {1+i+nb_done}/{len(source)}")
                 translated_text = translate(text, self.language_source, self.language_target, history, user_helped=user_helped, verbose=verbose)
-                target.append(target)
+                target.append(translated_text)
                 history.append((text,translated_text))
                 # save at every leaf when user_helped is activated
                 if user_helped and (autosave_path is not None): self.save(autosave_path)
