@@ -6,13 +6,6 @@ class EpubBook(Book):
     """
     Represents an epub
     """
-
-    def __init__(self, data):
-        """
-        load an epub from a given path
-        """
-        self.data = data
-
     def _export_raw_texts(self):
         """
         returns a dictionary of lists of string, one list per chapter (plus metadata)

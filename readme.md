@@ -48,9 +48,9 @@ We are purposefully avoiding the use of a proper `json` parser as the output is 
 
 ## Potential improvements
 
-* pass path to translation constructor that can be used for a reload of a partial translation
+* split `html` on headers for greater granularity / paralelism
+* add support or checking if a translation has been started and restarting there
 * clean up the `translate` function and logic
-* split html on headers
 
 * add support for other file formats such as `txt`, `pdf` and `docx`
 

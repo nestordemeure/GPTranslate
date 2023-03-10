@@ -9,13 +9,6 @@ class HtmlBook(Book):
     Represents an html as a single string
     (for ease of interoperability with epub format)
     """
-
-    def __init__(self, data):
-        """
-        load an html from a given path
-        """
-        self.data = data
-
     def _export_raw_texts(self):
         """
         reads all text nodes

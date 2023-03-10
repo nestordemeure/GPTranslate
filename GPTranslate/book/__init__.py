@@ -1,6 +1,5 @@
 import abc
-from .epub import EpubBook
-from .html import HtmlBook
+from pathlib import Path
 from ..translation import Translation
 
 class Book(abc.ABC):
@@ -9,12 +8,11 @@ class Book(abc.ABC):
     encapsulating its internal (extension dependent) representation
     """
 
-    @abc.abstractmethod
     def __init__(self, data):
         """
         load a book from given ready-made data
         """
-        pass
+        self.data = data
     
     @abc.abstractmethod
     def _export_raw_texts(self):
@@ -42,22 +40,27 @@ class Book(abc.ABC):
         if verbose: print("Extracting texts from book...")
         texts = self._export_raw_texts()
         if verbose: print("Translating...")
-        translation = Translation(texts, language_source, language_target)
-        texts_updated = translation.translate(autosave_path, user_helped, verbose)
+        #translation = Translation(texts, language_source, language_target)
+        #texts_updated = translation.translate(autosave_path, user_helped, verbose)
+        texts_updated = texts # TODO
         if verbose: print("Updating book...")
         self._import_raw_texts(texts_updated)
 
     @staticmethod
-    def load(path) -> 'Book':
+    def load(path: Path) -> 'Book':
         """
         loads a book from a given path
         """
-        if path.endswith('.epub'):
+        # NOTE does the import inside the function to avoid circular dependencies
+        extension = path.suffix
+        if extension == '.epub':
+            from .epub import EpubBook
             return EpubBook.load(path)
-        elif path.endswith('.html') or path.endswith('.xhtml'):
+        elif extension in ['.html', '.xhtml']:
+            from .html import HtmlBook
             return HtmlBook.load(path)
         else:
-            raise ValueError('Unsupported format.')
+            raise ValueError(f"Unsupported extension: {extension}")
 
     @abc.abstractmethod
     def save(self, path):
