@@ -10,7 +10,7 @@ target_language = 'English'
 data_folder = Path('./data')
 source_file = data_folder / 'Kirill Eskov - the Gospel of Afranius [ru].epub'
 target_file = data_folder / 'Kirill Eskov - the Gospel of Afranius [en].epub'
-check_translation_manually = True
+check_translation_manually = False
 verbose = True
 
 #----------------------------------------------------------------------------------------
