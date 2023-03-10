@@ -6,10 +6,10 @@ from GPTranslate import translate_book, translate_book_parallel
 # PARAMETERS
 
 source_language = 'Russian'
-target_language = 'English'
+target_language = 'French'
 data_folder = Path('./data')
 source_file = data_folder / 'Kirill Eskov - the Gospel of Afranius [ru].epub'
-target_file = data_folder / 'Kirill Eskov - the Gospel of Afranius [en].epub'
+target_file = data_folder / 'Kirill Eskov - the Gospel of Afranius [fr].epub'
 verbose = True
 
 #----------------------------------------------------------------------------------------

@@ -39,7 +39,7 @@ If an input cannot be translated, return it unmodified.
 
 Note that we ask for a `json` output. This is done to let us easily distinguish between the actual text of the translation and notes (the model tends to comment on its own translation).
 
-The `translation` field of the `json` output is extracted using a rough parser that slices the string based on the positions of the field names.
+The `translation` field of the `json` output is extracted manually by slicing the string based on the indices of the field names.
 We are purposefully avoiding the use of a proper `json` parser as the output is often malformed, crashing existing parsers.
 
 ## Potential improvements
