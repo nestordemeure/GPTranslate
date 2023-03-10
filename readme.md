@@ -51,8 +51,9 @@ We are purposefully avoiding the use of a proper `json` parser as the output is 
 * split `html` on headers for greater granularity / paralelism
 * add support or checking if a translation has been started and restarting there
 * clean up the `translate` function and logic
+* rename target into translation in the translation class
 
-* add support for other file formats such as `txt`, `pdf` and `docx`
+* add support for other file formats such as `pdf` and `docx`
 
 * use a database to let the model look at previous parts of the translation that might be relevant to the current bit of text being translated
 * build a user interface that lets a user:

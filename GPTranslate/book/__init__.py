@@ -40,9 +40,8 @@ class Book(abc.ABC):
         if verbose: print("Extracting texts from book...")
         texts = self._export_raw_texts()
         if verbose: print("Translating...")
-        #translation = Translation(texts, language_source, language_target)
-        #texts_updated = translation.translate(autosave_path, user_helped, verbose)
-        texts_updated = texts # TODO
+        translation = Translation(texts, language_source, language_target)
+        texts_updated = translation.translate(autosave_path, user_helped, verbose)
         if verbose: print("Updating book...")
         self._import_raw_texts(texts_updated)
 
@@ -51,16 +50,22 @@ class Book(abc.ABC):
         """
         loads a book from a given path
         """
+        # TODO move this test higher up in the UI?
+        if not path.exists():
+            raise ValueError(f"File '{path}' does not exist.")
         # NOTE does the import inside the function to avoid circular dependencies
         extension = path.suffix
-        if extension == '.epub':
+        if extension == '.txt':
+            from .text import TextBook
+            return TextBook.load(path)
+        elif extension == '.epub':
             from .epub import EpubBook
             return EpubBook.load(path)
         elif extension in ['.html', '.xhtml']:
             from .html import HtmlBook
             return HtmlBook.load(path)
         else:
-            raise ValueError(f"Unsupported extension: {extension}")
+            raise ValueError(f"Unsupported extension: '{extension}'")
 
     @abc.abstractmethod
     def save(self, path):
