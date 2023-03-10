@@ -1,5 +1,6 @@
 import abc
 from .epub import EpubBook
+from ..translation import Translation
 
 class Book(abc.ABC):
     """
@@ -15,7 +16,7 @@ class Book(abc.ABC):
         pass
     
     @abc.abstractmethod
-    def read_all(self):
+    def _read_all(self):
         """
         returns a tree representation of the text
         either a root (a list of (string,tree) where the string are equivalent to chapter titles)
@@ -24,7 +25,7 @@ class Book(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def write_all(self, updated_data):
+    def _write_all(self, updated_data):
         """
         takes a tree representation of the text
         either a root (a list of (string,tree) where the string are equivalent to chapter titles)
@@ -35,6 +36,16 @@ class Book(abc.ABC):
         """
         pass
     
+    def translate(self, language_source, language_target, autosave_path=None, user_helped=False, verbose=False):
+        """translate the text"""
+        if verbose: print("Extracting texts from book...")
+        texts = self._read_all()
+        if verbose: print("Translating...")
+        translation = Translation(texts, language_source, language_target)
+        texts_updated = translation.translate(autosave_path, user_helped, verbose)
+        if verbose: print("Updating book...")
+        self._write_all(texts_updated)
+
     @abc.abstractmethod
     def save(self, path):
         """

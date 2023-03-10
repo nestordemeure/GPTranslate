@@ -14,7 +14,7 @@ class EpubBook(Book):
         """
         self.data = epub.read_epub(path)
 
-    def read_all(self):
+    def _read_all(self):
         """
         returns a dictionary of lists of string, one list per chapter (plus metadata)
         """
@@ -43,7 +43,7 @@ class EpubBook(Book):
             result.append((name,text_list))
         return result
 
-    def write_all(self, updated_data):
+    def _write_all(self, updated_data):
         """
         takes a dictionary of lists of string, one list per chapter
         and updates the book in place

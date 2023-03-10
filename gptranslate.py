@@ -1,6 +1,5 @@
 from pathlib import Path
-from ebooklib import epub
-from GPTranslate import translate_book, translate_book_parallel
+from GPTranslate import EpubBook, Translation
 
 #----------------------------------------------------------------------------------------
 # PARAMETERS
@@ -10,6 +9,7 @@ target_language = 'English'
 data_folder = Path('./data')
 source_file = data_folder / 'Kirill Eskov - the Gospel of Afranius [ru].epub'
 target_file = data_folder / 'Kirill Eskov - the Gospel of Afranius [en].epub'
+translation_file = data_folder / 'Kirill Eskov - the Gospel of Afranius.trans'
 check_translation_manually = False
 verbose = True
 
@@ -18,18 +18,14 @@ verbose = True
 
 # imports the epub file
 print(f"Importing `{source_file}`...")
-book = epub.read_epub(source_file)
+book = EpubBook(source_file)
 
 # translating  the book
 print(f"Translating `{source_file}`...")
-if check_translation_manually:
-    book = translate_book(book, source_language=source_language, target_language=target_language, 
-                          output_file=target_file, user_helped=True, verbose=verbose)
-else:
-    book = translate_book_parallel(book, source_language=source_language, target_language=target_language, 
-                                   verbose=verbose)
+book.translate(source_language, target_language, translation_file, check_translation_manually, verbose)
 
 # exporting the epub file
 print(f"Exporting `{target_file}`...")
-epub.write_epub(target_file, book)
+book.save(target_file)
+
 print(f"Done!")

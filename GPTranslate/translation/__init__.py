@@ -68,6 +68,7 @@ class Translation:
             self._translate_serial(name='', source=self.source, target=self.target, autosave_path=autosave_path, user_helped=user_helped, verbose=verbose)
         else:
             self._translate_parallel(autosave_path=autosave_path, verbose=verbose)
+        return self.target
 
     def save(self, path):
         """save the translation to disk"""
