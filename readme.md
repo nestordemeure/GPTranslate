@@ -56,3 +56,4 @@ We are purposefully avoiding the use of a proper `json` parser as the output is 
     * pick the file
     * pick the destination language (default to English)
     * pick the source language (should default to autodetected)
+* add support for other file formats such as `txt`, `pdf`, `docx` and `html`
