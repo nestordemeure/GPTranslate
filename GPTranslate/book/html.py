@@ -20,6 +20,7 @@ class HtmlBook(Book):
         """
         reads all text nodes
         """
+        # we will have one list per heading
         result = list()
         heading_name = 'root'
         texts_list = list()
@@ -30,7 +31,7 @@ class HtmlBook(Book):
                 text = str(node)
                 if is_heading(node):
                     result.append((heading_name,texts_list))
-                    heading_name = text
+                    heading_name = text.strip()
                     texts_list = list()
                 if not text.strip().isdigit():
                     texts_list.append(text)
@@ -42,6 +43,7 @@ class HtmlBook(Book):
         """
         updates all text nodes
         """
+        # we will have one list per heading
         result.reverse()
         heading_name, texts_list = result.pop()
         texts_list.reverse()
