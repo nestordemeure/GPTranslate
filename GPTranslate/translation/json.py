@@ -1,20 +1,20 @@
+import json
 
-def answer_to_json(translation):
-    """takes a translation and builds a dummy json from it"""
-    return '{"translation": "' + translation + '"}'
+def encode_translation(tranlation):
+    """takes a translation and build a json around it"""
+    return json.dumps({'translation': tranlation})
 
-def json_to_answer(text, alternative_result):
+def decode_malformated_translation(text, source):
     """
-    takes a roughly json formated string
-    extracts the 'translation' field
-    using the other fields and braces as markers
-    we are purposefully not using a proper parser as the json could be malformated in ways no parsers accept
+    decodes a potentially malformated json
+    returns the content of the 'translation' field
+    returns the source as is if no translation is offered
     """
     # cut at translation
     translation_markers = '"translation":'
     index_start = text.find(translation_markers)
     if index_start < 0: 
-        return alternative_result
+        return source
     else:
         index_start += len(translation_markers)
         text = text[index_start:].strip()
@@ -31,10 +31,30 @@ def json_to_answer(text, alternative_result):
     if (index_brace >= 0) and (index_brace < index_end): index_end = index_brace
     # cut on the marker
     text = text[:index_end].strip()
-    # remove " and ",
+    # remove starting/ending " and ",
     if text.startswith('"'): text = text[1:]
     if text.endswith('"'): text = text[:-1]
     elif text.endswith('",'): text = text[:-2]
-    # cleanup escaped string
-    text = text.replace('\\"', '"')
     return text
+
+def decode_translation(json_text, source):
+    """
+    decodes a json
+    returns the content of the 'translation' field
+    returns the source as is if no translation is offered
+    """
+    # remove any trailing bit of text
+    # (a common type of malformed input)
+    last_brace_idx = json_text.rfind('}')
+    json_text = json_text[:(last_brace_idx+1)]
+    # decode json
+    try:
+        # use a proper parser
+        translation = json.loads(json_text).get('translation', source)
+    except Exception as e:
+        print(f"JSON: '{e}' for '{json_text}'")
+        # use a rougher parser that can deal with malformated inputs
+        translation = decode_malformated_translation(json_text, source)
+    # cleanup escaped string
+    translation = translation.replace('\\"', '"')
+    return translation

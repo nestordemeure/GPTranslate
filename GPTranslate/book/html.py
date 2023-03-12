@@ -27,14 +27,13 @@ class HtmlBook(Book):
         # parses the html
         html = BeautifulSoup(self.data, 'html.parser')
         for node in html.find_all(string=True):
-            if not ((node.parent.name in non_text_section) or (node.isspace())):
+            if not (node.parent.name in non_text_section):
                 text = str(node)
                 if is_heading(node):
                     result.append((heading_name,texts_list))
                     heading_name = text.strip()
                     texts_list = list()
-                if not text.strip().isdigit():
-                    texts_list.append(text)
+                texts_list.append(text)
         # adds the very last section and returns
         result.append((heading_name,texts_list))
         return result
@@ -50,15 +49,14 @@ class HtmlBook(Book):
         # parses the html
         html = BeautifulSoup(self.data, 'html.parser')
         for node in html.find_all(string=True):
-            if not ((node.parent.name in non_text_section) or (node.isspace())):
+            if not (node.parent.name in non_text_section):
                 text = str(node)
                 if is_heading(node):
                     heading_name, texts_list = result.pop()
                     texts_list.reverse()
-                if not text.strip().isdigit():
-                    updated_text = texts_list.pop()
-                    updated_node = node.replace(text, updated_text)
-                    node.replace_with(updated_node)
+                updated_text = texts_list.pop()
+                updated_node = node.replace(text, updated_text)
+                node.replace_with(updated_node)
         # saving the result
         self.data = html.prettify("utf-8")
 

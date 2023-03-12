@@ -15,7 +15,10 @@ class TextBook(Book):
         loads the text from a given path
         """
         with open(path, "r") as file:
-            data = [line.strip() for line in file.readlines()]
+            # imports the string
+            data = file.read()
+            # split at the endline characters
+            data = data.splitlines(keepends=True)
             return TextBook(data, path)
 
     def save(self, path):
@@ -23,5 +26,4 @@ class TextBook(Book):
         saves the text to the given path
         """
         with open(path, "w") as file:
-            data = [(line + '\n') for line in self.data]
-            file.writelines(data)
+            file.writelines(self.data)

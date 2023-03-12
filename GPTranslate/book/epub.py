@@ -16,8 +16,7 @@ class EpubBook(Book):
         for (namespace, metadata) in self.data.metadata.items():
             for (name, data) in metadata.items():
                 for (value, other) in data:
-                    if isinstance(value, str):
-                        metadata_list.append(value)
+                    metadata_list.append(value)
         result.append(('metadata',metadata_list))
         # read chapters
         for chapter in self.data.get_items_of_type(ITEM_DOCUMENT):
@@ -43,11 +42,8 @@ class EpubBook(Book):
             for (name, data) in metadata.items():
                 updated_metadata = list()
                 for (value, other) in data:
-                    if isinstance(value, str):
-                        updated_value = metadata_list.pop()
-                        updated_metadata.append( (updated_value,other) )
-                    else:
-                        updated_metadata.append( (value,other) )
+                    updated_value = metadata_list.pop()
+                    updated_metadata.append( (updated_value,other) )
                 metadata[name] = updated_metadata
         # write chapters
         for chapter in self.data.get_items_of_type(ITEM_DOCUMENT):

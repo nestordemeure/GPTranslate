@@ -17,7 +17,7 @@ class PdfBook(TextBook):
             # parse the pdf into a text file
             data = extract_text(file, laparams=LAParams())
             # split at the endline characters
-            data = data.splitlines()
+            data = data.splitlines(keepends=True)
             return PdfBook(data, path)
 
     def save(self, path):
@@ -28,5 +28,4 @@ class PdfBook(TextBook):
         path = path.with_suffix('.txt')
         # saves
         with open(path, "w") as file:
-            data = [(line + '\n') for line in self.data]
-            file.writelines(data)
+            file.writelines(self.data)
