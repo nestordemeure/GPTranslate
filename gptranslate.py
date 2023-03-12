@@ -38,7 +38,7 @@ book = Book.load(source_file)
 
 # translating  the book
 print(f"Translating `{source_file}`...")
-book.translate(language_source, language_target, translation_file, check_translation_manually, verbose)
+#book.translate(language_source, language_target, translation_file, check_translation_manually, verbose)
 
 # exporting the epub file
 print(f"Exporting `{target_file}`...")

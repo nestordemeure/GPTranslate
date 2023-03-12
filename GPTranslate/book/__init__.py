@@ -65,7 +65,7 @@ class Book(abc.ABC):
             from .epub import EpubBook
             return EpubBook.load(path)
         elif extension == '.pdf':
-            print("WARNING: pdf format is not editeable, input/output will be converted to html.")
+            print("WARNING: pdf format is not editeable, input/output will be converted to text.")
             from .pdf import PdfBook
             return PdfBook.load(path)
         elif extension in ['.html', '.xhtml']:

@@ -1,35 +1,32 @@
 import re
 from io import StringIO
-from pdfminer.high_level import extract_text_to_fp
+from pdfminer.high_level import extract_text
 from pdfminer.layout import LAParams
-from .html import HtmlBook
+from .text import TextBook
 
-class PdfBook(HtmlBook):
+class PdfBook(TextBook):
     """
-    Represents a pdf as an html
-    note that we lose some of the formating but it seems like the best compromise achieveable for now
+    Represents a pdf as a text
+    note that we lose the formating but it seems like the best compromise achieveable for now
     """
     def load(path):
         """
         loads the text from a given path
         """
         with open(path, 'rb') as file: 
-            # parse the pdf into a html
-            buffer = StringIO()
-            extract_text_to_fp(file, buffer, laparams=LAParams(), output_type='html', codec=None)
-            data = buffer.getvalue()
-            # turn pages into heading so that the html parser will split there
-            data = re.sub(r'<a name="(\d+)">Page (\d+)</a>', r'<h5 name="\1">Page \2</h5>', data)
-            # save the text
+            # parse the pdf into a text file
+            data = extract_text(file, laparams=LAParams())
+            # split at the endline characters
+            data = data.splitlines()
             return PdfBook(data, path)
 
     def save(self, path):
         """
         saves the text to the given path
         """
-        # insures that the output is a byte encoded html file
-        path = path.with_suffix('.html')
-        self.data = self.data.encode('utf-8')
+        # insures that the output is a html file
+        path = path.with_suffix('.txt')
         # saves
-        with open(path, 'wb') as file:
-            file.write(self.data)
+        with open(path, "w") as file:
+            data = [(line + '\n') for line in self.data]
+            file.writelines(data)
