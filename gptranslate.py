@@ -21,10 +21,10 @@ translation_file = data_folder / 'test.trans'
 check_translation_manually = False
 verbose = True
 
-language_target = 'English'
-language_source = 'French'
-source_file = data_folder / 'Kirill Eskov - the Gospel of Afranius [ru].epub'
-target_file = data_folder / 'Kirill Eskov - the Gospel of Afranius [fr].epub'
+language_source = 'English'
+language_target = 'French'
+source_file = data_folder / 'test [en].pdf'
+target_file = data_folder / 'test [fr].pdf'
 translation_file = data_folder / 'test.trans'
 check_translation_manually = False
 verbose = True

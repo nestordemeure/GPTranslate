@@ -68,7 +68,7 @@ class HtmlBook(Book):
         """
         with open(path, 'rb') as file:
             data = file.read()
-            return HtmlBook(data)
+            return HtmlBook(data, path)
 
     def save(self, path):
         """

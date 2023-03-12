@@ -8,11 +8,14 @@ class Book(abc.ABC):
     encapsulating its internal (extension dependent) representation
     """
 
-    def __init__(self, data):
+    def __init__(self, data, path=None):
         """
         load a book from given ready-made data
         """
+        # internal representation of the book
         self.data = data
+        # from where was the book read (optional)
+        self.path = path
     
     @abc.abstractmethod
     def _export_raw_texts(self):
@@ -61,6 +64,10 @@ class Book(abc.ABC):
         elif extension == '.epub':
             from .epub import EpubBook
             return EpubBook.load(path)
+        elif extension == '.pdf':
+            print("WARNING: pdf format is not editeable, input/output will be converted to html.")
+            from .pdf import PdfBook
+            return PdfBook.load(path)
         elif extension in ['.html', '.xhtml']:
             from .html import HtmlBook
             return HtmlBook.load(path)

@@ -65,7 +65,7 @@ class EpubBook(Book):
         loads the epub from a given path
         """
         data = epub.read_epub(path)
-        return EpubBook(data)
+        return EpubBook(data, path)
 
     def save(self, path):
         """

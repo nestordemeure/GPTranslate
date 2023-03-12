@@ -16,7 +16,7 @@ class TextBook(Book):
         """
         with open(path, "r") as file:
             data = [line.strip() for line in file.readlines()]
-            return TextBook(data)
+            return TextBook(data, path)
 
     def save(self, path):
         """

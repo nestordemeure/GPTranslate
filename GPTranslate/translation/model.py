@@ -55,6 +55,6 @@ def translate(text, source_language, target_language, previous_translations=[], 
     except Exception as e:
         # restart if the context is too large causing errors
         if len(previous_translations) == 0: raise e
-        previous_translations.pop()
+        previous_translations = previous_translations[1:]
         print(f"Warning: '{e}' restarting with {len(previous_translations)} elements.")
         return translate(text, source_language, target_language, previous_translations=previous_translations, verbose=verbose)
