@@ -1,7 +1,7 @@
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts.chat import SystemMessagePromptTemplate
 from langchain.schema import AIMessage, HumanMessage
-from .user_interface import pick_translation
+from .human_picker import pick_translation
 from .json import encode_translation, decode_translation
 
 #----------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ def reversible_strip(text):
     stripped_text = text.strip()
     return stripped_text, prefix, suffix
 
-def build_history(previous_translations):
+def build_history(previous_translations, max_history_size):
     """truncates the history (if needed) and strips messages"""
     # truncate history
     if len(previous_translations) > max_history_size:
@@ -76,7 +76,7 @@ def translate(source, source_language, target_language, previous_translations=[]
     """takes a string and a list of previous translation in sequential order in order to build a new translation"""
     # prepare inputs
     stripped_source, prefix, suffix = reversible_strip(source)
-    previous_translations = build_history(previous_translations)
+    previous_translations = build_history(previous_translations, max_history_size)
     messages = build_messages(stripped_source, source_language, target_language, previous_translations)
     nb_generations = 3 if user_helped else 1
     # call the model
@@ -96,7 +96,6 @@ def translate(source, source_language, target_language, previous_translations=[]
     translations = [decode_translation(answer, stripped_source) for answer in answers]
     # picks an output
     stripped_translation = pick_translation(stripped_source, translations, previous_translations) if user_helped else translations[0]
-    print(f"\n'{stripped_translation}'\n") # TODO debug
     # unstrip
     translation = prefix + stripped_translation + suffix
     return translation

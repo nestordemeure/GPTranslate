@@ -1,12 +1,12 @@
 import pickle
 import asyncio
-from .model import translate
+from .translator import translate
 
 #------------------------------------------------------------------------------
 # TEXT PROCESSONG
 
 def contains_text(text):
-    """returns True if the string contains some text"""
+    """returns True if this is a string containing some text"""
     return (isinstance(text, str) or isinstance(text, bytes)) and any(c.isalpha() for c in text)
 
 #------------------------------------------------------------------------------
@@ -23,19 +23,38 @@ def empty_clone(tree):
     else:
         return [ (name,empty_clone(child)) for (name,child) in tree ]
 
+def tree_equal(tree1, tree2):
+    """returns True if both trees are exactly equal"""
+    if (len(tree1) != len(tree2)) or (is_leaf(tree1) != is_leaf(tree2)):
+        # False if nodes have different structures
+        return False
+    elif is_leaf(tree1):
+        # leaf, check values
+        return tree1 == tree2
+    else:
+        # node, check for the equality of all subtrees
+        for ((name1,child1), (name2,child2)) in zip(tree1,tree2):
+            if not ((name1 == name2) and tree_equal(child1,child2)):
+                return False
+        return True
+
 #------------------------------------------------------------------------------
 # TRANSLATION
 
 class Translation:
-    """represent a translation being performed"""
+    """
+    represent a translation being performed
+    intermediate results will automatically be saved in `autosave_path`
+    """
 
-    def __init__(self, data, language_source, language_target):
+    def __init__(self, data, language_source, language_target, autosave_path=None):
         self.source = data
         self.translation = empty_clone(data)
         self.language_source = language_source
         self.language_target = language_target
+        self.autosave_path = autosave_path
 
-    def _translate_serial(self, name, source, translation, autosave_path=None, user_helped=False, verbose=False):
+    def _translate_serial(self, name, source, translation, user_helped=False, verbose=False):
         """goes through the tree serialy and performs the translation"""
         # process down the tree recurcively
         if is_leaf(source):
@@ -55,15 +74,16 @@ class Translation:
                     # skip text that does not contain letters
                     translated_text = text
                 translation.append(translated_text)
-                # save at every leaf when user_helped is activated
-                if user_helped and (autosave_path is not None): self.save(autosave_path)
-            if autosave_path is not None: self.save(autosave_path)
+                # autosave at every translation when user_helped is activated
+                if user_helped and (self.autosave_path is not None): self.save(self.autosave_path)
+            # autosave at the end of every leaf
+            if self.autosave_path is not None: self.save(self.autosave_path)
             if verbose: print(f"{name} done.")
         else:
             # this is a root node
             # process all children
             for ((name_child,source_child),(_,translation_child)) in zip(source, translation):
-                self._translate_serial(f"{name}|{name_child}", source_child, translation_child, autosave_path=autosave_path, user_helped=user_helped, verbose=verbose)
+                self._translate_serial(f"{name}|{name_child}", source_child, translation_child, user_helped=user_helped, verbose=verbose)
 
     async def _translate_async(self, name, source, translation, verbose=False):
         """goes through the tree asynchronously and perform the translation"""
@@ -81,18 +101,27 @@ class Translation:
             # wait on all the tasks
             await asyncio.gather(*tasks)
 
-    def _translate_parallel(self, name, source, translation, autosave_path=None, verbose=False):
+    def _translate_parallel(self, name, source, translation, verbose=False):
         """goes through the tree asynchronously and perform the translation"""
         loop = asyncio.get_event_loop()
         loop.run_until_complete(self._translate_async(name, source, translation, verbose=verbose))
-        if autosave_path is not None: self.save(autosave_path)
 
-    def translate(self, autosave_path=None, user_helped=False, verbose=False):
+    def translate(self, user_helped=False, verbose=False):
         """performs the translation"""
+        # check if a translation is already underway
+        if (self.autosave_path is not None) and self.autosave_path.exists():
+            previous_translation = Translation.load(self.autosave_path)
+            if (previous_translation.language_source == self.language_source) and (previous_translation.language_target == self.language_target) and tree_equal(previous_translation.source,self.source):
+                print(f"Loading '{self.autosave_path}' partial translation.")
+                self.translation = previous_translation.translation
+        # performs the translation
         if user_helped:
-            self._translate_serial(name='', source=self.source, translation=self.translation, autosave_path=autosave_path, user_helped=False, verbose=verbose)
+            self._translate_serial(name='', source=self.source, translation=self.translation, user_helped=False, verbose=verbose)
         else:
-            self._translate_parallel(name='', source=self.source, translation=self.translation, autosave_path=autosave_path, verbose=verbose)
+            self._translate_parallel(name='', source=self.source, translation=self.translation, verbose=verbose)
+        # delete the autosaved file
+        if (self.autosave_path is not None) and self.autosave_path.exists():
+            self.autosave_path.unlink()
         return self.translation
 
     def save(self, path):

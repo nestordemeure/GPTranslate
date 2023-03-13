@@ -40,11 +40,18 @@ class Book(abc.ABC):
     
     def translate(self, language_source, language_target, autosave_path=None, user_helped=False, verbose=False):
         """translate the text"""
+        # extracting
         if verbose: print("Extracting texts from book...")
         texts = self._export_raw_texts()
         if verbose: print("Translating...")
-        translation = Translation(texts, language_source, language_target)
+        # builds an autosaving path
+        if autosave_path is None:
+            user_prefix = 'u' if user_helped else ''
+            autosave_path = self.path.with_stem(self.path.stem + f"[{self.language_source}>{user_prefix}{self.language_target}]").with_suffix('.tmp')
+        # translates
+        translation = Translation(texts, language_source, language_target, autosave_path)
         texts_updated = translation.translate(autosave_path, user_helped, verbose)
+        # saving
         if verbose: print("Updating book...")
         self._import_raw_texts(texts_updated)
 

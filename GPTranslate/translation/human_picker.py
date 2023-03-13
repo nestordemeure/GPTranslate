@@ -28,8 +28,8 @@ def pick_translation(source, translations, previous_translations, use_heuristics
     clear_shell()
     if len(previous_translations) > 0:
         print(f"CONTEXT:")
-        for (previous_source,previous_translation) in previous_translations:
-            print(previous_translation)
+        for (prev_source,prev_translation) in previous_translations:
+            print(prev_translation)
     # displays the source
     print("\nSOURCE (TRANSLATION 0):")
     print(source)

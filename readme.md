@@ -48,17 +48,15 @@ We are purposefully avoiding the use of a proper `json` parser as the output is 
 
 ## Potential improvements
 
-Add language detection
-Update readme
+Add input language detection
+
 Deal with text being too long for number of tokens in output
 
-Improve prompt with capitals to remove json
-
 slice long list of texts into overlapping slaps when running in parallel 
-so that size does not exeeds 100 lines
+so that size does not exceds 100 lines
 (only if it exeeds 100+2*overlap)
 
-* add support or checking if a translation has been started and restarting there
+* Update readme
 * add support for other file formats such as `md`, `docx`, `odt`
 
 * add a command line interface
