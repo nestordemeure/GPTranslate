@@ -5,7 +5,7 @@ Give it a book and it will translate it into any language.
 
 ## Usage
 
-Modify the parameters in the header of the `gptranslate.py` file to specify your file paths and languages.
+Modify the parameters in the header of the `gptranslate.py` file to specify your file paths and languages (it will default to translating an automatically detected language to English).
 The input is expected to be in `epub`, `html`, `txt` or `pdf` (to be avoided as that format is neither editable nor designed to extract text).
 
 The program has two modes:
