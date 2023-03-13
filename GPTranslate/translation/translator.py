@@ -105,8 +105,8 @@ def translate(source, source_language, target_language, previous_translations=[]
             raise e
         else:
             # restart with a smaller context
-            warning_message = f"Warning: '{e}' succeeded with {len(previous_translations)} elements."
             previous_translations = previous_translations[1:]
+            warning_message = f"Warning: '{e}' succeeded with {len(previous_translations)} elements."
             return translate(source, source_language, target_language, previous_translations, user_helped, verbose, warning_message)
     # display any eventual warning message now that we have succesfully called the model
     if warning_message is not None: print(warning_message)
