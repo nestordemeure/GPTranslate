@@ -9,6 +9,7 @@ from .json import encode_translation, decode_translation
 
 max_history_size = 15
 temperature = 0.8
+max_tokens = 256
 
 #----------------------------------------------------------------------------------------
 # PROMPT
@@ -58,16 +59,31 @@ def build_messages(source, source_language, target_language, previous_translatio
 # MODEL
 
 # the model that will be used for the translation
-model = ChatOpenAI(temperature=temperature)
+model = ChatOpenAI(temperature=temperature, max_tokens=max_tokens)
+
+def incomplete_answer(answer):
+    """returns True if a message appears to be incomplete"""
+    return ('{' in answer) and not ('}' in answer)
 
 def call_model(messages, nb_generations=1):
     """calls the model and returns a list of answers"""
     # generate a batch of inputs (if we need more than one output)
     messages_batch = [messages] * nb_generations
-    # runs the model
-    answers = model.generate(messages=messages_batch).generations
-    answers = [answer[0].text for answer in answers]
-    return answers
+    # loop until we get at least one full answer or we exceed the maximum size
+    model.max_tokens = max_tokens
+    while True:
+        # runs the model
+        answers = model.generate(messages=messages_batch).generations
+        answers = [answer[0].text for answer in answers]
+        # remove incomplete answers
+        answers = [a for a in answers if not incomplete_answer(a)]
+        # return if we have at least one complete answer
+        if len(answers) > 0: 
+            return answers
+        else:
+            # else increase the output size and retry
+            model.max_tokens += 100
+            print(f"Warning: output size too short, restarting with {model.max_tokens} max_tokens.")
 
 #----------------------------------------------------------------------------------------
 # TRANSLATE
