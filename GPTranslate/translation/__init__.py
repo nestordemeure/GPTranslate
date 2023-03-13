@@ -2,8 +2,8 @@ import pickle
 import asyncio
 from .translator import translate
 from .language_detection import detect_language
-from .tree_processing import *
-from leaf_slicing import should_slice, slice_leaf, unslice_leaf
+from .tree_processing import is_leaf, empty_clone, flatten, contains_text, tree_equal
+from .leaf_slicing import should_slice, slice_leaf, unslice_leaf
 
 class Translation:
     """
