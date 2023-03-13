@@ -51,7 +51,7 @@ class Book(abc.ABC):
             autosave_path = self.path.with_stem(self.path.stem + f"[{source_prefix}{target_suffix}]").with_suffix('.tmp')
         # translates
         translation = Translation(texts, language_source, language_target, autosave_path)
-        texts_updated = translation.translate(user_helped, verbose)
+        texts_updated = translation.translate(user_helped=user_helped, split_leaves=split_leaves, verbose=verbose)
         # saving
         if verbose: print("Updating book...")
         self._import_raw_texts(texts_updated)
