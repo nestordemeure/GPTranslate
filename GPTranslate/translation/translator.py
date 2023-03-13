@@ -111,7 +111,7 @@ def translate(source, source_language, target_language, previous_translations=[]
     # display any eventual warning message now that we have succesfully called the model
     if warning_message is not None: print(warning_message)
     # parses outputs
-    translations = [decode_translation(answer, stripped_source) for answer in answers]
+    translations = [decode_translation(answer, stripped_source).strip() for answer in answers]
     # picks an output
     stripped_translation = pick_translation(stripped_source, translations, previous_translations) if user_helped else translations[0]
     # unstrip
