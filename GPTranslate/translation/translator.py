@@ -88,7 +88,7 @@ def call_model(messages, nb_generations=1):
 #----------------------------------------------------------------------------------------
 # TRANSLATE
 
-def translate(source, source_language, target_language, previous_translations=[], user_helped=False, verbose=True):
+def translate(source, source_language, target_language, previous_translations=[], user_helped=False, verbose=True, warning_message=None):
     """takes a string and a list of previous translation in sequential order in order to build a new translation"""
     # prepare inputs
     stripped_source, prefix, suffix = reversible_strip(source)
@@ -105,9 +105,11 @@ def translate(source, source_language, target_language, previous_translations=[]
             raise e
         else:
             # restart with a smaller context
-            print(f"Warning: '{e}' restarting with {len(previous_translations)} elements.")
+            warning_message = f"Warning: '{e}' succeeded with {len(previous_translations)} elements."
             previous_translations = previous_translations[1:]
-            return translate(source, source_language, target_language, previous_translations, user_helped, verbose)
+            return translate(source, source_language, target_language, previous_translations, user_helped, verbose, warning_message)
+    # display any eventual warning message now that we have succesfully called the model
+    if warning_message is not None: print(warning_message)
     # parses outputs
     translations = [decode_translation(answer, stripped_source) for answer in answers]
     # picks an output

@@ -38,7 +38,7 @@ class Book(abc.ABC):
         """
         pass
     
-    def translate(self, language_source='auto', language_target='English', autosave_path=None, user_helped=False, verbose=False):
+    def translate(self, language_source='auto', language_target='English', autosave_path=None, split_leaves=False, user_helped=False, verbose=False):
         """translate the text"""
         # extracting
         if verbose: print("Extracting texts from book...")

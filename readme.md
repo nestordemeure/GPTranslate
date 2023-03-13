@@ -48,17 +48,10 @@ We are purposefully avoiding the use of a proper `json` parser as the output is 
 
 ## Potential improvements
 
-* when running in parallel, slice long lists into overlapping sublists of size 100 with overlap 5
-  (only if size is above 100+2*5)
-  thus we can process them in parallel while using the overlap to not lose too much context
-
 * Update readme
-
 * add a command line interface
 * add support for other file formats such as `md`, `docx`, `odt`
 * add an interactive mode
+  (is this actually one of our use-cases?)
 * use a database to let the model look at previous parts of the translation that might be relevant to the current bit of text being translated
-* build a user interface that lets a user:
-    * pick the file
-    * pick the destination language (default to English)
-    * pick the source language (should default to autodetected)
+  (contrary to my initial beliefs, this does not seem to be needed for most applications)
