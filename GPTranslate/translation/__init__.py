@@ -1,45 +1,8 @@
 import pickle
 import asyncio
 from .translator import translate
-
-#------------------------------------------------------------------------------
-# TEXT PROCESSONG
-
-def contains_text(text):
-    """returns True if this is a string containing some text"""
-    return (isinstance(text, str) or isinstance(text, bytes)) and any(c.isalpha() for c in text)
-
-#------------------------------------------------------------------------------
-# TREE PROCESSING
-
-def is_leaf(tree):
-    """returns true if a tree is a leaf"""
-    return (len(tree) > 0) and not isinstance(tree[0], tuple)
-
-def empty_clone(tree):
-    """clones a tree, replacing leaves with empty lists"""
-    if is_leaf(tree):
-        return list()
-    else:
-        return [ (name,empty_clone(child)) for (name,child) in tree ]
-
-def tree_equal(tree1, tree2):
-    """returns True if both trees are exactly equal"""
-    if (len(tree1) != len(tree2)) or (is_leaf(tree1) != is_leaf(tree2)):
-        # False if nodes have different structures
-        return False
-    elif is_leaf(tree1):
-        # leaf, check values
-        return tree1 == tree2
-    else:
-        # node, check for the equality of all subtrees
-        for ((name1,child1), (name2,child2)) in zip(tree1,tree2):
-            if not ((name1 == name2) and tree_equal(child1,child2)):
-                return False
-        return True
-
-#------------------------------------------------------------------------------
-# TRANSLATION
+from .language_detection import detect_language
+from .tree_processing import *
 
 class Translation:
     """
@@ -47,10 +10,10 @@ class Translation:
     intermediate results will automatically be saved in `autosave_path`
     """
 
-    def __init__(self, data, language_source, language_target, autosave_path=None):
+    def __init__(self, data, language_source='auto', language_target='English', autosave_path=None):
         self.source = data
         self.translation = empty_clone(data)
-        self.language_source = language_source
+        self.language_source = detect_language(flatten(self.source)) if (language_source=='auto') else language_source
         self.language_target = language_target
         self.autosave_path = autosave_path
 

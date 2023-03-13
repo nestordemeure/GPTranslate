@@ -52,7 +52,6 @@ def decode_translation(json_text, source):
         # use a proper parser
         translation = json.loads(json_text).get('translation', source)
     except Exception as e:
-        print(f"JSON: '{e}' for '{json_text}'")
         # use a rougher parser that can deal with malformated inputs
         translation = decode_malformated_translation(json_text, source)
     # cleanup escaped string

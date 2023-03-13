@@ -47,10 +47,10 @@ class Book(abc.ABC):
         # builds an autosaving path
         if autosave_path is None:
             user_prefix = 'u' if user_helped else ''
-            autosave_path = self.path.with_stem(self.path.stem + f"[{self.language_source}>{user_prefix}{self.language_target}]").with_suffix('.tmp')
+            autosave_path = self.path.with_stem(self.path.stem + f"[{language_source}>{user_prefix}{language_target}]").with_suffix('.tmp')
         # translates
         translation = Translation(texts, language_source, language_target, autosave_path)
-        texts_updated = translation.translate(autosave_path, user_helped, verbose)
+        texts_updated = translation.translate(user_helped, verbose)
         # saving
         if verbose: print("Updating book...")
         self._import_raw_texts(texts_updated)
