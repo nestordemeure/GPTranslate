@@ -12,7 +12,7 @@ The program has two modes:
 * `check_translation_manually=True` in which case the translation is done in collaboration between the user and algorithm, giving several potential translations to the user and letting them pick one or write their own (this can take a long time but gives the best results),
 * `check_translation_manually=False` which is optimized for speed (good for a fast translation of a text).
 
-Run `python3 gptranslate.py`.
+Put your [OpenAI API key in an environment variable](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety#:~:text=key%20safety%20measure.-,3.%20Use%20Environment%20Variables%20in%20place%20of%20your%20API%20key,-An%20environment%20variable) then run `python3 gptranslate.py`.
 
 Once the program is started, it will create a `tmp` file (deleted once the translation is done) in the same folder as the input.
 As long as that file exists, you can kill and restart the program, picking up the translation where you left.
