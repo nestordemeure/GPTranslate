@@ -14,7 +14,7 @@ class TextBook(Book):
         """
         loads the text from a given path
         """
-        with open(path, "r") as file:
+        with open(path, "r", encoding="utf-8") as file:
             # imports the string
             data = file.read()
             # split at the endline characters
@@ -25,5 +25,5 @@ class TextBook(Book):
         """
         saves the text to the given path
         """
-        with open(path, "w") as file:
+        with open(path, "w", encoding="utf-8") as file:
             file.writelines(self.data)
